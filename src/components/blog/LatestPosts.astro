@@ -1,6 +1,6 @@
 ---
 import Grid from '~/components/blog/Grid.astro';
-import Headline from '~/components/blog/Headline.astro';
+// import Headline from '~/components/blog/Headline.astro';
 import { findLatestPosts } from '~/utils/blog';
 
 export interface Props {
@@ -13,18 +13,18 @@ export interface Props {
 }
 
 const {
-  count = 1000,
+  count = 6,
 } = Astro.props;
 
 const posts = await findLatestPosts({ count });
 ---
 
 <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-  <Headline
+  <!-- <Headline
     subtitle="Encuentra todas nuestras publicaciones y podcast con actulizaciones constantes. Te invitamos a debatir las tematicas en el foro interactivo."
   >
     Blog
-  </Headline>
+  </Headline> -->
 
   <Grid posts={posts} />
 </section>
