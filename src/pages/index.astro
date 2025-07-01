@@ -8,6 +8,7 @@ import ChatMes from '../components/chatmes.jsx';
 // Curso:
 // import Curso from '~/components/widgets/Curso.astro';
 import LatestPosts from '~/components/blog/LatestPosts.astro';
+import LatestPosts2 from '~/components/blog/LatestPosts2.astro';
 // import BlogList from '~/components/blog/List.astro';
 // import { fetchPosts } from '~/utils/blog';
 // import { BLOG_BASE } from '~/utils/permalinks';
@@ -125,6 +126,18 @@ const meta = {
 
 
   <LatestPosts
+    title="Publiaciones constantes, de nuestro pensamiento."
+    information={`
+		`}
+    postIds={[
+      'astrowind-template-in-depth.md',
+      'get-started-website-with-astro-tailwind-css.md',
+      'how-to-customize-astrowind-to-your-brand.md',
+      'useful-resources-to-create-websites.md',
+      
+    ]}
+  />
+  <LatestPosts2
     title="Publiaciones constantes, de nuestro pensamiento."
     information={`
 		`}

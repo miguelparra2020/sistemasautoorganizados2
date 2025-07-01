@@ -1,0 +1,69 @@
+---
+import Item from '~/components/blog/ListItem2.astro';
+import type { Post } from '~/types';
+
+export interface Props {
+  posts: Array<Post>;
+}
+
+const { posts } = Astro.props;
+---
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<div class="relative swiper-container overflow-hidden w-full">
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      {posts.map((post) => (
+        <div class="swiper-slide px-2">
+          <div class="h-[50vh]">
+            <Item post={post} />
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- Controles de navegación -->
+    <div class="swiper-button-prev !text-white !bg-[#5c603c]/80 !w-10 !h-10 !rounded-full !left-2"></div>
+    <div class="swiper-button-next !text-white !bg-[#5c603c]/80 !w-10 !h-10 !rounded-full !right-2"></div>
+    
+    <!-- Paginación (puntos) -->
+    <div class="swiper-pagination !bottom-0 !pb-2"></div>
+  </div>
+</div>
+
+<!-- Script de Swiper -->
+<script>
+  import Swiper from 'swiper';
+  
+  document.addEventListener('astro:page-load', () => {
+    new Swiper('.swiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+    });
+  });
+</script>

@@ -7,20 +7,27 @@ import { BLOG } from '~/config.mjs';
 import type { Post } from '~/types';
 
 import { getPermalink } from '~/utils/permalinks';
-// import { findImage } from '~/utils/images';
+import { findImage } from '~/utils/images';
 
 export interface Props {
   post: Post;
 }
 
 const { post } = Astro.props;
-// const image = await findImage(post.image);
+const image = await findImage(post.image);
 
 const link = !BLOG?.post?.disabled ? getPermalink(post.permalink, 'post') : '';
 ---
 
 <a href={link ?? 'javascript:void(0)'} class="block transition-transform duration-300 hover:scale-105">
-  <article class="bg-[#5c603c] text-white p-6 h-full flex flex-col rounded-lg shadow-lg border-2 border-[#7b8147]">
+  <article class="relative text-white p-6 h-full flex flex-col rounded-lg shadow-lg border-2 overflow-hidden">
+    {image && (
+      <div class="absolute inset-0 z-0">
+        <img src={image.src} alt={post.title} class="w-full h-full object-cover opacity-90" />
+        <div class="absolute inset-0 bg-[#5c603c]/10"></div>
+      </div>
+    )}
+    <div class="relative z-10">
     <div class="icon-container mb-4">
       <div class="w-12 h-12 flex items-center justify-center border-2 border-white rounded-full bg-[#4a4d30]">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,18 +36,19 @@ const link = !BLOG?.post?.disabled ? getPermalink(post.permalink, 'post') : '';
       </div>
     </div>
     
-    <header class="mb-4">
-      <h2 class="text-xl font-bold leading-tight text-white">
+    <header class="mb-4 bg-[#5c603c]/90">
+      <h2 class="text-xl font-bold leading-tight text-white ">
         {post.title}
       </h2>
     </header>
 
     {post.excerpt && 
-      <p class="text-white/90 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
+      <p class="text-white/90 text-sm mb-4 line-clamp-3 bg-[#5c603c]/90">{post.excerpt}</p>
     }
     
-    <footer class="mt-auto pt-4 border-t border-white/20">
+    <footer class="mt-auto pt-4 border-t border-white/20 ">
       {post.tags && <PostTags tags={post.tags} />}
     </footer>
+    </div>
   </article>
 </a>
