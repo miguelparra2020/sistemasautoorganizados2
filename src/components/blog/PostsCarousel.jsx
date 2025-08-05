@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const PostsCarousel = ({ posts }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

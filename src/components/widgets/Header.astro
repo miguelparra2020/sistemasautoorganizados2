@@ -1,5 +1,6 @@
 ---
-import { Icon } from 'astro-icon';
+
+import TopicsDropdown from './TopicsDropdown.jsx';
 
 import { getHomePermalink } from '~/utils/permalinks';
 
@@ -20,6 +21,7 @@ interface MenuLink extends Link {
 
 interface TopicLink extends Link {
   icon: string;
+  sublinks?: Array<Link>;
 }
 
 export interface Props {
@@ -34,19 +36,12 @@ export interface Props {
 
 // Definición de enlaces de navegación principal
 const mainLinks = [
-  { text: 'AUTOR', href: '/autor' },
-  { text: 'LIBROS', href: '/libros' },
-  { text: 'RECOMENDADOS', href: '/recomendados' },
+  { text: 'AUTOR', href: '/perfilautor' },
+  { text: 'LIBROS', href: '/category/libro' },
+  { text: 'RECOMENDADOS', href: '/blog' },
 ];
 
-// Definición de temas relacionados
-const topicLinks = [
-  { text: 'POLÍTICA', href: '/politica', icon: 'tabler:currency-dollar' },
-  { text: 'ECONOMÍA', href: '/economia', icon: 'tabler:currency-dollar' },
-  { text: 'EDUCACIÓN', href: '/educacion', icon: 'tabler:book' },
-  { text: 'BIENESTAR', href: '/bienestar', icon: 'tabler:book' },
-  { text: 'CIENCIA Y TECNOLOGÍA', href: '/ciencia-tecnologia', icon: 'tabler:bulb' }
-];
+
 
 ---
 
@@ -84,43 +79,15 @@ const topicLinks = [
     </div>
   </div>
   
-  <!-- Sección de Temas Relacionados -->
-  <div class="bg-white py-2 px-6 border-t border-b border-gray-200">
-    <div class="w-[90%] md:w-[80%] max-w-7xl mx-auto flex items-center justify-center">
-      <!-- Contenedor flex para todos los elementos en una línea -->
-      <div class="flex flex-col md:flex-row items-center gap-4 w-[100%]">
-        <div>
-          <span class="text-gray-600 font-medium whitespace-nowrap">TEMAS RELACIONADOS:</span>
-        </div>
-        <div class="w-[100%] flex flex-col md:flex-row">
-        {topicLinks.map(({ text, href, icon }) => (
-          <div class="flex gap-2 items-center justify-center w-[100%]" >
-            <div class="flex items-center justify-start w-[90%]">
-              <a 
-                href={href}
-                class="flex items-center group transition duration-150 ease-in-out"
-              >
-                <div class="rounded-full p-2 bg-gray-100 group-hover:bg-gray-200 mr-2">
-                  <Icon name={icon} class="w-5 h-5 text-[#606c38]" />
-                </div>
-                <span class="text-gray-700 group-hover:text-[#606c38] font-medium">{text}</span>
-              </a>
-            </div>
-        <div class="md:hidden">
-            <Icon name={icon} class="w-5 h-5" />
-        </div>
-        </div>
-        ))}</div>
-      </div>
-    </div>
-  </div>
+  <!-- Sección de Temas Relacionados con Dropdown JSX -->
+  <TopicsDropdown client:load />
   
 </header>
 
 <script>
   // Esperar a que el DOM esté completamente cargado
   document.addEventListener('DOMContentLoaded', () => {
-    // Obtener referencias a los elementos
+    // Obtener referencias a los elementos del menú móvil
     const toggleButton = document.getElementById('toggle-mobile-menu')
     const mobileMenu = document.getElementById('mobile-menu')
     if (toggleButton && mobileMenu) {
