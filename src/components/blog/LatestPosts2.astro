@@ -1,5 +1,5 @@
 ---
-import Grid from '~/components/blog/Grid2.astro';
+import Grid2 from '~/components/blog/Grid2.astro';
 // import Headline from '~/components/blog/Headline.astro';
 import { findLatestPosts } from '~/utils/blog';
 
@@ -26,5 +26,5 @@ const posts = await findLatestPosts({ count });
     Blog
   </Headline> -->
 
-  <Grid posts={posts} />
+  <Grid2 posts={posts} />
 </section>
