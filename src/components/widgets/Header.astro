@@ -45,7 +45,7 @@ const mainLinks = [
 
 ---
 
-<header class="w-full" id="header">
+<header class="w-full fixed top-0 left-0 z-50" id="header">
   <!-- Menú principal con fondo verde oliva -->
   <div class="bg-[#606c38] text-white py-4 px-6 flex items-center justify-center">
     <div class="w-[90%] md:w-[80%] flex flex-wrap justify-between items-center">
@@ -76,6 +76,20 @@ const mainLinks = [
           </svg>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Menú móvil desplegable -->
+  <div class="md:hidden bg-[#606c38] border-t border-[#4a5a2a] hidden" id="mobile-menu">
+    <div class="px-6 py-4 space-y-3">
+      {mainLinks.map(({ text, href }) => (
+        <a 
+          class="block text-white font-medium hover:text-gray-200 transition duration-150 ease-in-out py-2"
+          href={href}
+        >
+          {text}
+        </a>
+      ))}
     </div>
   </div>
   

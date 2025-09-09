@@ -1,16 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
-// Links quemados para debugging
-const HARDCODED_LINKS = {
-  politica: [
-    { text: 'Política Nacional', href: 'https://google.com' },
-    { text: 'Política Internacional', href: 'https://youtube.com' },
-    { text: 'Análisis Político', href: 'https://github.com' }
+// Links reales del sistema
+const TOPIC_LINKS = {
+  'socio-politicos': [
+    { text: 'Los planos de la paz', href: '/losplanosdelapaz' },
+    { text: 'Revolución científico tecnológica parte I', href: '/revolucioncientificotecnologica' },
+    { text: 'Revolución científico tecnológica parte II', href: '/revolucioncientificotecnologicaparteii' },
+    { text: 'Revolución científico tecnológica parte III', href: '/revolucioncientificotecnologicaparteiii' },
+    { text: 'Decálogo de la paz', href: '/decalogodelapaz' },
+    { text: 'Ideología del libertador', href: '/ideologiadellibertador' },
+    { text: 'Convocatoria a la intelectualidad', href: '/convocatoriaalaintelectualidad' },
+    { text: 'Plan de salvación nacional', href: '/plandesalvacionnacional' },
+    { text: 'Libros', href: '/category/libro' }
   ],
-  economia: [
-    { text: 'Macroeconomía', href: 'https://stackoverflow.com' },
-    { text: 'Microeconomía', href: 'https://reddit.com' },
-    { text: 'Finanzas', href: 'https://twitter.com' }
+  'socio-cientificos': [
+    { text: 'Psicoanálisis y Pedagogía Formativa', href: '/psicoanilisyeducacionformativa' },
+    { text: 'Propuesta de reforma académica', href: '/propuestadereformaacademica' },
+    { text: 'La parranda como identidad', href: '/parrandalatinoamericana' },
+    { text: 'La Realización Personal', href: '/realizacionpersonal' },
+    { text: 'Como ganar el premio Nobel', href: '/premionobel' },
+    { text: 'Libros', href: '/category/libro' }
   ]
 };
 
@@ -36,6 +46,14 @@ const BulbIcon = ({ className }) => (
 const TopicsDropdown = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRefs = useRef({});
+  const [portalContainer, setPortalContainer] = useState(null);
+
+  // Crear contenedor para el portal
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPortalContainer(document.body);
+    }
+  }, []);
 
   // Función para obtener el componente de icono
   const getIconComponent = (iconType) => {
@@ -51,19 +69,19 @@ const TopicsDropdown = () => {
     }
   };
 
-  // Definición simplificada de temas relacionados con links quemados
+  // Definición completa de temas relacionados
   const topicLinks = [
     { 
-      text: 'POLÍTICA', 
+      text: 'SOCIO-POLÍTICOS Y ECONÓMICOS', 
       href: '/politica', 
       icon: 'currency-dollar',
-      sublinks: HARDCODED_LINKS.politica
+      sublinks: TOPIC_LINKS['socio-politicos']
     },
     { 
-      text: 'ECONOMÍA', 
-      href: '/economia', 
-      icon: 'currency-dollar',
-      sublinks: HARDCODED_LINKS.economia
+      text: 'SOCIO-CIENTÍFICOS Y EDUCATIVOS', 
+      href: '/educacion', 
+      icon: 'book',
+      sublinks: TOPIC_LINKS['socio-cientificos']
     }
   ];
 
@@ -74,6 +92,18 @@ const TopicsDropdown = () => {
     const newValue = openDropdown === index ? null : index;
     setOpenDropdown(newValue);
     console.log('New openDropdown:', newValue);
+  };
+
+  // Obtener posición del botón para posicionar el dropdown
+  const getDropdownPosition = (index) => {
+    const buttonElement = dropdownRefs.current[index];
+    if (!buttonElement) return { top: '120px', left: '50px' };
+    
+    const rect = buttonElement.getBoundingClientRect();
+    return {
+      top: `${rect.bottom + 8}px`,
+      left: `${rect.left}px`
+    };
   };
 
   // Cerrar dropdown al hacer clic fuera
@@ -94,85 +124,79 @@ const TopicsDropdown = () => {
   }, [openDropdown]);
 
   return (
-    <div className="bg-white py-2 px-6 border-t border-b border-gray-200">
+    <div className="bg-white py-2 px-6 border-t border-b border-gray-200 w-full" style={{ position: 'relative', zIndex: 40 }}>
       <div className="w-[90%] md:w-[80%] max-w-7xl mx-auto flex items-center justify-center">
         <div className="flex flex-col md:flex-row items-center gap-4 w-[100%]">
           <div>
             <span className="text-gray-600 font-medium whitespace-nowrap">TEMAS RELACIONADOS:</span>
           </div>
-          <div className="w-[100%] flex flex-col md:flex-row justify-center">
-            {topicLinks.map(({ text, href, icon, sublinks }, index) => (
+          <div className="w-[100%] flex flex-col md:flex-row justify-center gap-4 md:gap-8">
+            {topicLinks.map(({ text,  icon, sublinks }, index) => (
               <div 
                 key={index}
-                className="relative flex items-center justify-center w-[100%]"
+                className="relative w-full md:w-auto"
                 ref={el => dropdownRefs.current[index] = el}
               >
                 {/* Enlace principal */}
-                <div className="flex items-center justify-start w-[90%]">
-                  <a 
-                    href={href}
-                    className="flex items-center group transition duration-150 ease-in-out"
-                  >
+                <div className="flex items-center justify-center md:justify-start w-full">
+                  <div className="flex items-center group">
                     <div className="rounded-full p-2 bg-gray-100 group-hover:bg-gray-200 mr-2">
                       {React.createElement(getIconComponent(icon), { className: "w-5 h-5 text-[#606c38]" })}
                     </div>
-                    <span className="text-gray-700 group-hover:text-[#606c38] font-medium text-sm">
+                    <span className="text-gray-700 group-hover:text-[#606c38] font-medium text-sm text-center md:text-left">
                       {text}
                     </span>
-                  </a>
-                  
-                  {/* Flecha indicadora de dropdown */}
-                  {sublinks && (
-                    <button 
-                      className="ml-1 p-1 text-gray-500 hover:text-[#606c38] transition duration-150 ease-in-out"
-                      onClick={() => handleDropdownToggle(index)}
-                      aria-label={`Toggle ${text} submenu`}
-                    >
-                      <svg 
-                        className={`w-4 h-4 transform transition-transform duration-200 ${
-                          openDropdown === index ? 'rotate-180' : ''
-                        }`}
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
+                    
+                    {/* Flecha indicadora de dropdown */}
+                    {sublinks && (
+                      <button 
+                        className="ml-2 p-1 text-gray-500 hover:text-[#606c38] transition duration-150 ease-in-out"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDropdownToggle(index);
+                        }}
+                        aria-label={`Toggle ${text} submenu`}
                       >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M19 9l-7 7-7-7" 
-                        />
-                      </svg>
-                    </button>
-                  )}
+                        <svg 
+                          className={`w-4 h-4 transform transition-transform duration-200 ${
+                            openDropdown === index ? 'rotate-180' : ''
+                          }`}
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M19 9l-7 7-7-7" 
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                 </div>
                 
                 {/* Menú desplegable */}
-                {sublinks && (
+                {sublinks && openDropdown === index && (
                   <div 
+                    className="absolute top-full left-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 opacity-100 visible translate-y-0 transition-all duration-200 ease-in-out"
                     style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: '0',
-                      marginTop: '8px',
-                      width: '256px',
+                      width: '320px',
                       backgroundColor: 'white',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
                       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                      zIndex: 999999,
-                      opacity: openDropdown === index ? 1 : 0,
-                      visibility: openDropdown === index ? 'visible' : 'hidden',
-                      transform: openDropdown === index ? 'translateY(0)' : 'translateY(-8px)',
-                      transition: 'all 0.2s ease-in-out'
+                      zIndex: 60
                     }}
                   >
-                    <div className="py-2">
+                    <div className="py-2 max-h-96 overflow-y-auto">
                       {sublinks.map(({ text: subText, href: subHref }, subIndex) => (
                         <a 
                           key={subIndex}
                           href={subHref}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#606c38] transition duration-150 ease-in-out"
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#606c38] transition duration-150 ease-in-out border-b border-gray-100 last:border-b-0"
                           onClick={() => setOpenDropdown(null)}
                         >
                           {subText}
