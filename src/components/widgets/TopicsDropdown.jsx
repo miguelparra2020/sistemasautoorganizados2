@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useRef, useEffect } from 'react'
 
 // Links reales del sistema
 const TOPIC_LINKS = {
@@ -46,14 +45,6 @@ const BulbIcon = ({ className }) => (
 const TopicsDropdown = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRefs = useRef({});
-  const [portalContainer, setPortalContainer] = useState(null);
-
-  // Crear contenedor para el portal
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPortalContainer(document.body);
-    }
-  }, []);
 
   // Función para obtener el componente de icono
   const getIconComponent = (iconType) => {
@@ -94,17 +85,6 @@ const TopicsDropdown = () => {
     console.log('New openDropdown:', newValue);
   };
 
-  // Obtener posición del botón para posicionar el dropdown
-  const getDropdownPosition = (index) => {
-    const buttonElement = dropdownRefs.current[index];
-    if (!buttonElement) return { top: '120px', left: '50px' };
-    
-    const rect = buttonElement.getBoundingClientRect();
-    return {
-      top: `${rect.bottom + 8}px`,
-      left: `${rect.left}px`
-    };
-  };
 
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
