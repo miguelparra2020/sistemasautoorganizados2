@@ -1,5 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+// Links quemados para debugging
+const HARDCODED_LINKS = {
+  politica: [
+    { text: 'Política Nacional', href: 'https://google.com' },
+    { text: 'Política Internacional', href: 'https://youtube.com' },
+    { text: 'Análisis Político', href: 'https://github.com' }
+  ],
+  economia: [
+    { text: 'Macroeconomía', href: 'https://stackoverflow.com' },
+    { text: 'Microeconomía', href: 'https://reddit.com' },
+    { text: 'Finanzas', href: 'https://twitter.com' }
+  ]
+};
+
 // Componentes de iconos SVG
 const CurrencyDollarIcon = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,63 +51,29 @@ const TopicsDropdown = () => {
     }
   };
 
-  // Definición de temas relacionados con sublinks
+  // Definición simplificada de temas relacionados con links quemados
   const topicLinks = [
     { 
       text: 'POLÍTICA', 
       href: '/politica', 
       icon: 'currency-dollar',
-      sublinks: [
-        { text: 'Política Nacional', href: '/politica/nacional' },
-        { text: 'Política Internacional', href: '/politica/internacional' },
-        { text: 'Análisis Político', href: '/politica/analisis' }
-      ]
+      sublinks: HARDCODED_LINKS.politica
     },
     { 
       text: 'ECONOMÍA', 
       href: '/economia', 
       icon: 'currency-dollar',
-      sublinks: [
-        { text: 'Macroeconomía', href: '/economia/macro' },
-        { text: 'Microeconomía', href: '/economia/micro' },
-        { text: 'Finanzas', href: '/economia/finanzas' }
-      ]
-    },
-    { 
-      text: 'EDUCACIÓN', 
-      href: '/educacion', 
-      icon: 'book',
-      sublinks: [
-        { text: 'Pedagogía', href: '/educacion/pedagogia' },
-        { text: 'Tecnología Educativa', href: '/educacion/tecnologia' },
-        { text: 'Investigación', href: '/educacion/investigacion' }
-      ]
-    },
-    { 
-      text: 'BIENESTAR', 
-      href: '/bienestar', 
-      icon: 'book',
-      sublinks: [
-        { text: 'Salud Mental', href: '/bienestar/salud-mental' },
-        { text: 'Ejercicio', href: '/bienestar/ejercicio' },
-        { text: 'Nutrición', href: '/bienestar/nutricion' }
-      ]
-    },
-    { 
-      text: 'CIENCIA Y TECNOLOGÍA', 
-      href: '/ciencia-tecnologia', 
-      icon: 'bulb',
-      sublinks: [
-        { text: 'Inteligencia Artificial', href: '/ciencia-tecnologia/ia' },
-        { text: 'Biotecnología', href: '/ciencia-tecnologia/biotech' },
-        { text: 'Innovación', href: '/ciencia-tecnologia/innovacion' }
-      ]
+      sublinks: HARDCODED_LINKS.economia
     }
   ];
 
   // Manejar clic en dropdown toggle
   const handleDropdownToggle = (index) => {
-    setOpenDropdown(openDropdown === index ? null : index);
+    console.log('Dropdown toggle clicked:', index);
+    console.log('Current openDropdown:', openDropdown);
+    const newValue = openDropdown === index ? null : index;
+    setOpenDropdown(newValue);
+    console.log('New openDropdown:', newValue);
   };
 
   // Cerrar dropdown al hacer clic fuera
@@ -170,11 +150,22 @@ const TopicsDropdown = () => {
                 {/* Menú desplegable */}
                 {sublinks && (
                   <div 
-                    className={`absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg shadow-2xl z-[99999] transition-all duration-200 ease-in-out ${
-                      openDropdown === index 
-                        ? 'opacity-100 visible transform translate-y-0' 
-                        : 'opacity-0 invisible transform -translate-y-2'
-                    }`}
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: '0',
+                      marginTop: '8px',
+                      width: '256px',
+                      backgroundColor: 'white',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                      zIndex: 999999,
+                      opacity: openDropdown === index ? 1 : 0,
+                      visibility: openDropdown === index ? 'visible' : 'hidden',
+                      transform: openDropdown === index ? 'translateY(0)' : 'translateY(-8px)',
+                      transition: 'all 0.2s ease-in-out'
+                    }}
                   >
                     <div className="py-2">
                       {sublinks.map(({ text: subText, href: subHref }, subIndex) => (
